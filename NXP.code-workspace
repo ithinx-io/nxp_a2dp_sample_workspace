@@ -1,0 +1,115 @@
+{
+	// https://code.visualstudio.com/docs/editor/workspaces
+	// https://code.visualstudio.com/docs/editor/multi-root-workspaces
+	// https://code.visualstudio.com/docs/editor/variables-reference
+
+	"folders": [
+		{
+			"path": "."
+		},
+	],
+	// extensions.json section
+	"extensions": {
+		"recommendations": [
+			"ms-azuretools.vscode-docker",        // Docker support
+			"ms-vscode-remote.remote-containers", // remote/devcontainer support
+			"ms-vscode-remote.remote-ssh",        // remote SSH support (if working remotely)
+		],
+	},
+	// settings.json section
+	"settings": {
+	},
+	// tasks.json section
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Setup Zephyr",
+				"type": "shell",
+				"command": "west init -l manifest-repo && west update",
+				"problemMatcher": []
+			},
+			{
+				"label": "Build & Run zephyrblog_example1",
+				"type": "shell",
+				"command": "west build -b native_posix_64 -t run zephyrblog_example1",
+				"problemMatcher": []
+			},
+			{
+				"label": "Build test",
+				"type": "shell",
+				"group": "build",
+				"command": "west",
+				"args": [
+					"build",
+					"-p", "always",
+					"-b", "esp32s2_lolin_mini",
+					"/workspaces/zephyr/samples/basic/blinky"
+				]
+			},
+	
+			{
+				"label": "Clean",
+				"type": "shell",
+				"group": "build",
+				"command": "west",
+				"args": [
+					"clean"
+				]
+			},
+	
+			// FLASH
+			{
+				"label": "Flash sample",
+				"type": "shell",
+				"group": "build",
+				"command": "west",
+				"args": [
+					"flash"
+				],
+			},
+			// DEBUG
+			{
+				"label": "Debug sample",
+				"type": "shell",
+				"group": "build",
+				"command": "west",
+				"args": [
+					"debug",
+				],
+			},		],
+		"inputs": [
+		]
+	},
+	// launch.json section
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "(gdb) Launch",
+				"type": "cppdbg",
+				"request": "launch",
+				"program": "/workspaces/zephyrblog_root/build/zephyr/zephyr.exe",
+				"args": [],
+				"stopAtEntry": true,
+				"cwd": "${fileDirname}",
+				"environment": [],
+				"externalConsole": false,
+				"MIMode": "gdb",
+				"setupCommands": [
+					{
+						"description": "Enable pretty-printing for gdb",
+						"text": "-enable-pretty-printing",
+						"ignoreFailures": true
+					},
+					{
+						"description": "Set Disassembly Flavor to Intel",
+						"text": "-gdb-set disassembly-flavor intel",
+						"ignoreFailures": true
+					}
+				]
+			},
+		],
+	}
+}
+

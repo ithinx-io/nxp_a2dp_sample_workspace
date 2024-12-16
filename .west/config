@@ -1,0 +1,6 @@
+[manifest]
+path = nxp-zephyr
+file = west.yml
+
+[zephyr]
+base = nxp-zephyr

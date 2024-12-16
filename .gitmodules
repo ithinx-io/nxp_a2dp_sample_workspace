@@ -1,0 +1,3 @@
+[submodule "nxp-zephyr"]
+	path = nxp-zephyr
+	url = https://github.com/nxp-zephyr/nxp-zephyr
