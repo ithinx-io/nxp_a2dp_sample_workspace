@@ -16,9 +16,9 @@ To initialize:
 - After VSCode startup (will take some time for the initial docker container build), update Zephyr modules and HAL blobs:
   ```
   west update
-  west blobs fetch
+  west blobs fetch hal_nxp
   ```
 - build example:
   ```
-  west build -b mimxrt1170_evk@B/mimxrt1176/cm7 nxp-zephyr/samples/bluetooth/a2dp_source
+  west build nxp-zephyr/samples/bluetooth/a2dp_source
   ```

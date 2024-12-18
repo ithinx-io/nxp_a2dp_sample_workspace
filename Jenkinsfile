@@ -49,7 +49,7 @@ pipeline {
 				sh '''
 				   west update --fetch smart --narrow
 				   west blobs fetch
-				   west build -b mimxrt1170_evk@B/mimxrt1176/cm7 nxp-zephyr/samples/bluetooth/a2dp_source
+				   west build nxp-zephyr/samples/bluetooth/a2dp_source
 				'''
 			}
 		}

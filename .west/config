@@ -1,4 +1,9 @@
 [manifest]
-path = nxp-zephyr
+path = .
 file = west.yml
 
+[build]
+board = mimxrt1170_evk@B/mimxrt1176/cm7
+
+[zephyr]
+base = nxp-zephyr

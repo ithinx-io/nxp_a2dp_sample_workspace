@@ -1,0 +1,20 @@
+manifest:
+  remotes:
+    - name: zephyr
+      url-base: https://github.com/nxp-zephyr
+  projects:
+    - name: zephyr
+      remote: zephyr
+      repo-path: nxp-zephyr
+      revision: feature/MCUX-74374-a2dp-source-sample
+      path: nxp-zephyr
+      import:
+        name-allowlist:
+          - cmsis
+          - hal_nxp
+          - segger
+          - tinycrypt
+          - mcux-soc-svd
+          - libsbc
+  self:
+    path: .
