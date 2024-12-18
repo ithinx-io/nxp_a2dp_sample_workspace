@@ -4,7 +4,8 @@
 
 pipeline {
 	options {
-		gitLabConnection('ithinx gitlab connection')
+		gitLabConnection('ithinx gitlab connection')  // connection to git (for gitlabCommitStatus)
+		buildDiscarder(logRotator(numToKeepStr: '1')) // keep only last build
 	}
 	triggers {
 		gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'All')
@@ -27,7 +28,6 @@ pipeline {
 		stage ('checkout') {
 			steps {
 				itxCheckout()
-				//checkout scm
 			}
 		}
 
@@ -40,14 +40,14 @@ pipeline {
 					label 'linux'
 					additionalBuildArgs '--build-arg USER_UID=$UID'
 					args '''
-							--env ZEPHYR_BASE=$WORKSPACE/nxp-zephyr
+					        --env ZEPHYR_BASE=$WORKSPACE/nxp-zephyr
 					        --volume $HOME/.ssh:/builder/.ssh
 					     '''
 				}
 			}
 			steps {
 				sh '''
-				   west update
+				   west update --fetch smart --narrow
 				   west blobs fetch
 				   west build -b mimxrt1170_evk@B/mimxrt1176/cm7 nxp-zephyr/samples/bluetooth/a2dp_source
 				'''

@@ -32,6 +32,7 @@
 	//"mounts": [ "source=/dev/,target=/dev/,type=bind,consistency=consistent" ],
 
 	"runArgs": [
+		"--network=host"
 	//	"--privileged"
 	]
 }
