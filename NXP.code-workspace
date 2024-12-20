@@ -23,41 +23,6 @@
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
-			{
-				"label": "Setup Zephyr",
-				"type": "shell",
-				"command": "west init -l manifest-repo && west update",
-				"problemMatcher": []
-			},
-			{
-				"label": "Build & Run zephyrblog_example1",
-				"type": "shell",
-				"command": "west build -b native_posix_64 -t run zephyrblog_example1",
-				"problemMatcher": []
-			},
-			{
-				"label": "Build test",
-				"type": "shell",
-				"group": "build",
-				"command": "west",
-				"args": [
-					"build",
-					"-p", "always",
-					"-b", "esp32s2_lolin_mini",
-					"/workspaces/zephyr/samples/basic/blinky"
-				]
-			},
-	
-			{
-				"label": "Clean",
-				"type": "shell",
-				"group": "build",
-				"command": "west",
-				"args": [
-					"clean"
-				]
-			},
-	
 			// FLASH
 			{
 				"label": "Flash sample",
@@ -86,30 +51,20 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
-				"name": "(gdb) Launch",
-				"type": "cppdbg",
+				"name": "Debug with JLink",
+				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
 				"request": "launch",
-				"program": "/workspaces/zephyrblog_root/build/zephyr/zephyr.exe",
-				"args": [],
-				"stopAtEntry": true,
-				"cwd": "${fileDirname}",
-				"environment": [],
-				"externalConsole": false,
-				"MIMode": "gdb",
-				"setupCommands": [
-					{
-						"description": "Enable pretty-printing for gdb",
-						"text": "-enable-pretty-printing",
-						"ignoreFailures": true
-					},
-					{
-						"description": "Set Disassembly Flavor to Intel",
-						"text": "-gdb-set disassembly-flavor intel",
-						"ignoreFailures": true
-					}
-				]
-			},
+				"type": "cortex-debug",
+				"device": "MIMXRT1062XXX5A",
+				"showDevDebugOutput": "none", //"raw",
+				"servertype": "jlink",
+				"interface": "jtag",
+				"serverpath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
+				"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
+				"toolchainPrefix": "arm-zephyr-eabi",
+				"runToEntryPoint": "main",
+			}
 		],
 	}
 }
-

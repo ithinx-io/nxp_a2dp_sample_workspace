@@ -11,29 +11,39 @@ RUN  apt update \
   && apt install -y -q \
        bash-completion \
        gdb \
-       nano
+       curl \
+       # required for USN device handling and serial monitor
+       udev \
+       usbutils \
+       # required for git messages
+       nano \
+       # required to build guiconfig
+       python3-tk
+
+# Download and install JLink tools
+RUN  curl -d 'accept_license_agreement=accepted' \
+      -X POST https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb \
+      -o /tmp/JLink_Linux_x86_64.deb \
+  && dpkg --unpack /tmp/JLink_Linux_x86_64.deb \
+  && rm /tmp/JLink_Linux_x86_64.deb \
+  && rm -f /var/lib/dpkg/info/jlink.postinst \
+  && (dpkg --configure jlink || apt install -yf) \
+  && apt install -y libxrandr2 libxfixes3 libxcursor1
 
 # Align user/group account if necessary ('user' is the name brought in by default Zephyr Docker images) and add to sudo group (password-free)
 # https://serverfault.com/questions/437342/how-can-i-rename-a-unix-user
-RUN apt install -y -q sudo \
-&&  echo a \
-&&  if ! grep x:$USER_GID: /etc/group;  then echo 1 && groupmod --gid $USER_GID user; fi \
-&&  echo b \
-&&  if ! grep x:$USER_GID: /etc/group;  then echo 1 && groupmod --gid $USER_GID user; fi \
-&&  echo c \
-&&  if ! grep $USER_NAME:x /etc/group;  then echo 2 && groupmod --new-name $USER_NAME user; fi \
-&&  echo d \
-&&  if ! grep x:$USER_UID: /etc/passwd; then echo 3 && usermod --uid $USER_UID $USER_NAME; fi \
-&&  echo e \
-&&  if ! grep :$USER_GID:: /etc/passwd; then echo 4 && usermod --gid $USER_GID $USER_NAME; fi \
-&&  echo f \
-&&  if ! grep $USER_NAME:x /etc/passwd; then echo 5 && usermod --login $USER_NAME --move-home --home /home/$USER_NAME user; fi \
-&&  echo g \
-&&  chown -R $USER_UID:$USER_GID /home/$USER_NAME \
-&&  chsh -s /usr/bin/bash $USER_NAME \
-&&  usermod -a -G root $USER_NAME && usermod -a -G dialout $USER_NAME \
-&&  echo "$USER_NAME ALL = NOPASSWD: ALL" > /etc/sudoers.d/$USER_NAME \
-&&  chmod 0440 /etc/sudoers.d/$USER_NAME
+RUN  apt install -y -q sudo \
+  && if ! grep x:$USER_GID: /etc/group;  then groupmod --gid $USER_GID user; fi \
+  && if ! grep x:$USER_GID: /etc/group;  then groupmod --gid $USER_GID user; fi \
+  && if ! grep $USER_NAME:x /etc/group;  then groupmod --new-name $USER_NAME user; fi \
+  && if ! grep x:$USER_UID: /etc/passwd; then usermod --uid $USER_UID $USER_NAME; fi \
+  && if ! grep :$USER_GID:: /etc/passwd; then usermod --gid $USER_GID $USER_NAME; fi \
+  && if ! grep $USER_NAME:x /etc/passwd; then usermod --login $USER_NAME --move-home --home /home/$USER_NAME user; fi \
+  && chown -R $USER_UID:$USER_GID /home/$USER_NAME \
+  && chsh -s /usr/bin/bash $USER_NAME \
+  && usermod -a -G root $USER_NAME && usermod -a -G dialout $USER_NAME \
+  && echo "$USER_NAME ALL = NOPASSWD: ALL" > /etc/sudoers.d/$USER_NAME \
+  && chmod 0440 /etc/sudoers.d/$USER_NAME
 
 # default to $USER_NAME
 USER $USER_NAME

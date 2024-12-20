@@ -20,7 +20,8 @@
 				"ms-vscode.cpptools",
 				"ms-vscode.cmake-tools",
 				"mhutchie.git-graph",
-				"ms-vscode.vscode-serial-monitor"
+				"ms-vscode.vscode-serial-monitor",
+				"marus25.cortex-debug"
 			]
 		}
 	},
@@ -29,10 +30,12 @@
 		// overwrite ZEPHYR_BASE as we have NXP zephyr in 'nxp-zephyr' folder
 		"ZEPHYR_BASE": "${containerWorkspaceFolder}/nxp-zephyr"
 	},
-	//"mounts": [ "source=/dev/,target=/dev/,type=bind,consistency=consistent" ],
-
+	"mounts": [
+//		"source=/dev/,target=/dev/,type=bind,consistency=consistent"
+		"source=/dev,target=/dev,type=bind,consistency=cached" // necessary to handle USB device (re-)connect
+	],
 	"runArgs": [
-		"--network=host"
-	//	"--privileged"
+		"--network=host",
+		"--privileged"
 	]
 }
