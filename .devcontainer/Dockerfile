@@ -1,3 +1,4 @@
+# https://github.com/zephyrproject-rtos/docker-image/tree/v0.26.18
 FROM zephyrprojectrtos/zephyr-build:v0.26.18
 
 ARG USER_NAME=user
@@ -12,7 +13,7 @@ RUN  apt update \
        bash-completion \
        gdb \
        curl \
-       # required for USN device handling and serial monitor
+       # required for USB device handling and serial monitor
        udev \
        usbutils \
        # required for git messages
@@ -39,9 +40,11 @@ RUN  apt install -y -q sudo \
   && if ! grep x:$USER_UID: /etc/passwd; then usermod --uid $USER_UID $USER_NAME; fi \
   && if ! grep :$USER_GID:: /etc/passwd; then usermod --gid $USER_GID $USER_NAME; fi \
   && if ! grep $USER_NAME:x /etc/passwd; then usermod --login $USER_NAME --move-home --home /home/$USER_NAME user; fi \
+  && mkdir -p /home/$USER_NAME/.config \
   && chown -R $USER_UID:$USER_GID /home/$USER_NAME \
   && chsh -s /usr/bin/bash $USER_NAME \
-  && usermod -a -G root $USER_NAME && usermod -a -G dialout $USER_NAME \
+  && usermod -a -G root $USER_NAME \
+  && usermod -a -G dialout $USER_NAME \
   && echo "$USER_NAME ALL = NOPASSWD: ALL" > /etc/sudoers.d/$USER_NAME \
   && chmod 0440 /etc/sudoers.d/$USER_NAME
 

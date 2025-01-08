@@ -13,15 +13,14 @@
 				"files.trimTrailingWhitespace": true,
 				"files.insertFinalNewline": true,
 				"files.trimFinalNewlines": true,
-				"extensions.ignoreRecommendations": true,
-				"terminal.integrated.profiles.linux": "bash"
+				"extensions.ignoreRecommendations": true
 			},
 			"extensions": [
-				"ms-vscode.cpptools",
-				"ms-vscode.cmake-tools",
-				"mhutchie.git-graph",
-				"ms-vscode.vscode-serial-monitor",
-				"marus25.cortex-debug"
+				"ms-vscode.cpptools",              // common C/C++ language support
+				"ms-vscode.cmake-tools",           // common cmake support
+				"marus25.cortex-debug",            // cortex debug extension
+				"mhutchie.git-graph",              // git support
+				"ms-vscode.vscode-serial-monitor"  // integrated serial monitor
 			]
 		}
 	},
@@ -31,11 +30,13 @@
 		"ZEPHYR_BASE": "${containerWorkspaceFolder}/nxp-zephyr"
 	},
 	"mounts": [
-//		"source=/dev/,target=/dev/,type=bind,consistency=consistent"
+		//"source=/dev/,target=/dev/,type=bind,consistency=consistent"
 		"source=/dev,target=/dev,type=bind,consistency=cached" // necessary to handle USB device (re-)connect
+		//"source=/dev/bus/usb,target=/dev/bus/usb,type=bind,consistency=cached" // necessary to handle USB device (re-)connect
 	],
 	"runArgs": [
 		"--network=host",
 		"--privileged"
-	]
+	],
+	"postAttachCommand": "sudo service udev restart"
 }

@@ -13,57 +13,85 @@
 		"recommendations": [
 			"ms-azuretools.vscode-docker",        // Docker support
 			"ms-vscode-remote.remote-containers", // remote/devcontainer support
-			"ms-vscode-remote.remote-ssh",        // remote SSH support (if working remotely)
+			"ms-vscode-remote.remote-ssh"
 		],
 	},
 	// settings.json section
 	"settings": {
+		"cmake.configureOnOpen": false
 	},
 	// tasks.json section
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
-			// FLASH
 			{
-				"label": "Flash sample",
+				"label": "west: build A2DP sample",
 				"type": "shell",
-				"group": "build",
 				"command": "west",
 				"args": [
-					"flash"
+					"build",
+					"-b", "${input:board}",
+					//"-v"
+					"--build-dir", "build/${input:board}",
+					"nxp-zephyr/samples/bluetooth/a2dp_source",
 				],
-			},
-			// DEBUG
-			{
-				"label": "Debug sample",
-				"type": "shell",
-				"group": "build",
-				"command": "west",
-				"args": [
-					"debug",
+				"options": {
+					"cwd": "${workspaceFolder}"
+				},
+				"problemMatcher": [
+					"$gcc"
 				],
-			},		],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				}
+			}
+		],
 		"inputs": [
-		]
+			{
+				"type": "pickString",
+				"id": "board",
+				"description": "Select NXP Evaluation Board",
+				"options": [
+					"mimxrt1060_evk@qspi",
+					"mimxrt1170_evk/mimxrt1176/cm7",
+				],
+			}
+		],
 	},
 	// launch.json section
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [
 			{
+				// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
 				"name": "Debug with JLink",
 				"cwd": "${workspaceFolder}",
-				"executable": "${workspaceFolder}/build/zephyr/zephyr.elf",
+				"executable": "${workspaceFolder}/build/${input:board}/zephyr/zephyr.elf",
 				"request": "launch",
 				"type": "cortex-debug",
 				"device": "MIMXRT1062XXX5A",
-				"showDevDebugOutput": "none", //"raw",
+				"showDevDebugOutput": "none", //"raw","none"
 				"servertype": "jlink",
-				"interface": "jtag",
-				"serverpath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
-				"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
-				"toolchainPrefix": "arm-zephyr-eabi",
+				//"serialNumber": "xxxxxxxx", // if you have more than one J-Link probe add the serial number here
+				//"interface": "swd", // "swd" "jtag"
+				"linux": {
+					"serverpath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
+					"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
+					"toolchainPrefix": "arm-zephyr-eabi"
+				},
 				"runToEntryPoint": "main",
+			}
+		],
+		"inputs": [
+			{
+				"type": "pickString",
+				"id": "board",
+				"description": "Select NXP Evaluation Board",
+				"options": [
+					"mimxrt1060_evk@qspi",
+					"mimxrt1170_evk/mimxrt1176/cm7",
+				],
 			}
 		],
 	}

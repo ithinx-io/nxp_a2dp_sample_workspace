@@ -17,4 +17,4 @@ manifest:
           - mcux-soc-svd
           - libsbc
   self:
-    path: .
+    path: nxp-zephyr/samples/bluetooth/a2dp_source
