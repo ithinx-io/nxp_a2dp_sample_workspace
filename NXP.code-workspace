@@ -18,7 +18,21 @@
 	},
 	// settings.json section
 	"settings": {
-		"cmake.configureOnOpen": false
+		"cmake.configureOnOpen": false,
+
+		// NXP MIMXRT1060_EVK
+		//"board": "mimxrt1060_evk@qspi",
+		//"device": "MIMXRT1062XXX5A",
+		//"build_dir": "build/MIMXRT1060",
+		//"svd_path": ".devcontainer/scripts/MIMXRT1062.xml"
+
+		// NXP MIMXRT1170_EVK
+		"board": "mimxrt1170_evk@B/mimxrt1176/cm7",
+		"device": "MIMXRT1176DVMAA",
+		"linkserver_device": "MIMXRT1176xxxxx:MIMXRT1170-EVK-CM7-ONLY", // only necessary if using MCU-Link CMSIS-DAP launch settings
+		"pyocd_device": "mimxrt1170_cm7", // only necessary if using pyOCD launch settings
+		"build_dir": "build/MIMXRT1170",
+		"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
 	},
 	// tasks.json section
 	"tasks": {
@@ -30,9 +44,9 @@
 				"command": "west",
 				"args": [
 					"build",
-					"-b", "${input:board}",
+					"-b", "${config:board}",
 					//"-v"
-					"--build-dir", "build/${input:board}",
+					"--build-dir", "${config:build_dir}",
 					"nxp-zephyr/samples/bluetooth/a2dp_source",
 				],
 				"options": {
@@ -63,24 +77,80 @@
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [
+			// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
 			{
-				// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
 				"name": "Debug with JLink",
 				"cwd": "${workspaceFolder}",
-				"executable": "${workspaceFolder}/build/${input:board}/zephyr/zephyr.elf",
+				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
 				"request": "launch",
 				"type": "cortex-debug",
-				"device": "MIMXRT1062XXX5A",
-				"showDevDebugOutput": "none", //"raw","none"
 				"servertype": "jlink",
 				//"serialNumber": "xxxxxxxx", // if you have more than one J-Link probe add the serial number here
-				//"interface": "swd", // "swd" "jtag"
+				//"interface": "swd", // "swd" or "jtag"
 				"linux": {
 					"serverpath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
 					"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
 					"toolchainPrefix": "arm-zephyr-eabi"
 				},
+				"showDevDebugOutput": "none", //"raw","none"
+				"device": "${config:device}",
+				"svdFile": "${workspaceRoot}/${config:svd_path}",
 				"runToEntryPoint": "main",
+				"preLaunchTask": "west: build A2DP sample"
+			},
+			{
+				// https://mcuoneclipse.com/2023/11/27/mcu-link-with-cortex-debug-and-linkserver/
+				// https://stackoverflow.com/questions/75703331/how-to-add-arguments-to-launch-json-in-vs-code
+				// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
+				"name": "Debug with CMSIS-DAP",
+				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
+				"request": "launch",
+				"type": "cortex-debug",
+				"servertype": "openocd",
+				"configFiles": [
+					// This may need to be "interface/picoprobe.cfg" for some previous builds
+					"interface/cmsis-dap.cfg"
+				],
+				"openOCDPreConfigLaunchCommands": [
+					//"transport select swd",
+					"source [find interface/cmsis-dap.cfg]",
+					//"cmsis_dap_vid_pid 0x1fc9 0x0143",
+					//"cmsis_dap_backend hid"
+				],
+
+				"linux": {
+					//"gdbPath" : "gdb-multiarch",
+					"searchDir": [ "/opt/toolchains/zephyr-sdk-0.16.9/sysroots/x86_64-pokysdk-linux/usr/share/openocd/scripts" ],
+					"serverpath": ".devcontainer/scripts/LinkServer.sh",
+					"serverArgs": [ "-device", "${config:linkserver_device}" ],
+					"toolchainPrefix": "arm-zephyr-eabi",
+					"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
+					"overrideGDBServerStartedRegex": "GDB server listening on port"
+				},
+				"showDevDebugOutput": "none", //"raw","none"
+				"device": "${config:device}",
+				"svdFile": "${workspaceRoot}/${config:svd_path}",
+				"runToEntryPoint": "main",
+				"preLaunchTask": "west: build A2DP sample"
+			},
+			{
+				"name": "Debug with pyOCD",
+				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
+				"request": "launch",
+				"type": "cortex-debug",
+				"servertype": "pyocd",
+				"serverArgs": [ "-t", "mimxrt1170_cm7" ],
+				"linux": {
+					"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
+					"toolchainPrefix": "arm-zephyr-eabi"
+				},
+				"showDevDebugOutput": "none", //"raw","none"
+				"device": "${config:device}",
+				"svdFile": "${workspaceRoot}/${config:svd_path}",
+				"runToEntryPoint": "main",
+				"preLaunchTask": "west: build A2DP sample"
 			}
 		],
 		"inputs": [
@@ -91,7 +161,7 @@
 				"options": [
 					"mimxrt1060_evk@qspi",
 					"mimxrt1170_evk/mimxrt1176/cm7",
-				],
+				]
 			}
 		],
 	}

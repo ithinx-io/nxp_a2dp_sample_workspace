@@ -48,5 +48,18 @@ RUN  apt install -y -q sudo \
   && echo "$USER_NAME ALL = NOPASSWD: ALL" > /etc/sudoers.d/$USER_NAME \
   && chmod 0440 /etc/sudoers.d/$USER_NAME
 
+#RUN wget -P /etc/udev/rules.d/ https://github.com/pyocd/pyOCD/raw/refs/heads/main/udev/50-cmsis-dap.rules
+
+# install LinkServer
+ARG LINKSERVER=LINKSERVER-LIN-1.5.30.deb.bin
+RUN  wget -P /tmp/ https://www.nxp.com/downloads/en/debugging-and-visualization-tools/$LINKSERVER \
+  && chmod +x /tmp/$LINKSERVER \
+  && /tmp/$LINKSERVER --noexec --target /tmp/LinkServer/ \
+  && cd /tmp/LinkServer/ \
+  # needed to manually start udev daemon to enable install of MCU-Link and LinkServer
+  && /lib/systemd/systemd-udevd --daemon \
+  && ./install.sh acceptLicense \
+  && cd .. && rm $LINKSERVER && rm -rf LinkServer/
+
 # default to $USER_NAME
 USER $USER_NAME
