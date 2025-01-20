@@ -31,4 +31,4 @@ while [[ $# -gt 0 ]]; do
 done
 
 # forward to NXP LinkServer
-/usr/local/LinkServer/LinkServer gdbserver --gdb-port $gdbport --semihost-port $telnetport --update-mode auto $device
+/usr/local/LinkServer/LinkServer gdbserver --gdb-port $gdbport --semihost-port $telnetport --update-mode none $device

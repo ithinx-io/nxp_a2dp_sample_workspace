@@ -18,7 +18,37 @@ To initialize:
   west update
   west blobs fetch hal_nxp
   ```
-- build example:
+
+# Required Hardware rework
+
+To run this sample on an EVK with M.2 wireless card some HW rework ist necessary:
+- **MIMXRT1170-EVKB**
+  - remove R183 (LPSPI1_SDI to LPSPI Flash)
+  - remove R1816 (GPIO_DISP_B2_12 to RGMII1_PHY_INTB)
+  - add 0R to R404 (GPIO_AD_31 to WL_RST#)
+  - add 0R to R1901 (GPIO_DISP_B2_11/BT_UART_RXD to M.2 (via 1.8V Levelshifter))
+  - add 0R to R1902 (GPIO_DISP_B2_12/BT_UART_CTS to M.2 (via 1.8V Levelshifter))
+
+  For the location of the resistors above please refer to the [front](docs/MIMXRT1170-EVKB%20UART%20Front.png) and [back](docs/MIMXRT1170-EVKB%20UART%20Back.png) board images
+- **MIMXRT1060-EVK**
+  - ToDo
+
+
+# Build example
+
+- by command line:
   ```
   west build nxp-zephyr/samples/bluetooth/a2dp_source
   ```
+- by VSCode: \
+  Simply press **Ctrl** + **Shift** + **B** (="Terminal"->"exeucte build job")
+
+# Run example
+
+- by VSCode: \
+  Simply select connected debugger and press **F5**
+
+  | Evaluation Board | on-board Debugger |
+  |------------------|-------------------|
+  | MIMXRT1170-EVKB  | CMSIS-DAP         |
+  | MIMXRT1060-EVK   | JLINK             |
