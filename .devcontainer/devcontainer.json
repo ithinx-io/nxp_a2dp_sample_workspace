@@ -30,9 +30,7 @@
 		"ZEPHYR_BASE": "${containerWorkspaceFolder}/nxp-zephyr"
 	},
 	"mounts": [
-		//"source=/dev/,target=/dev/,type=bind,consistency=consistent"
 		"source=/dev,target=/dev,type=bind,consistency=cached" // necessary to handle USB device (re-)connect
-		//"source=/dev/bus/usb,target=/dev/bus/usb,type=bind,consistency=cached" // necessary to handle USB device (re-)connect
 	],
 	"runArgs": [
 		"--network=host",

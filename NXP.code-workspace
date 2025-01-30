@@ -18,21 +18,27 @@
 	},
 	// settings.json section
 	"settings": {
-		"cmake.configureOnOpen": false,
-
 		// NXP MIMXRT1060_EVK
 		//"board": "mimxrt1060_evk@qspi",
 		//"device": "MIMXRT1062XXX5A",
-		//"build_dir": "build/MIMXRT1060",
-		//"svd_path": ".devcontainer/scripts/MIMXRT1062.xml"
+		//"build_dir": "build/MIMXRT1060EVK@QSPI",
+		//"svd_path": ".devcontainer/scripts/MIMXRT1062.xml",
+
+		// NXP MIMXRT1060_EVKB
+		"board": "mimxrt1060_evkb",
+		"device": "MIMXRT1062XXX6B",
+		"build_dir": "build/MIMXRT1060EVKB",
+		"svd_path": ".devcontainer/scripts/MIMXRT1062.xml",
 
 		// NXP MIMXRT1170_EVK
-		"board": "mimxrt1170_evk@B/mimxrt1176/cm7",
-		"device": "MIMXRT1176DVMAA",
-		"linkserver_device": "MIMXRT1176xxxxx:MIMXRT1170-EVK-CM7-ONLY", // only necessary if using MCU-Link CMSIS-DAP launch settings
-		"pyocd_device": "mimxrt1170_cm7", // only necessary if using pyOCD launch settings
-		"build_dir": "build/MIMXRT1170",
-		"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
+		//"board": "mimxrt1170_evk@B/mimxrt1176/cm7",
+		//"device": "MIMXRT1176DVMAA",
+		//"build_dir": "build/MIMXRT1170EVKB",
+		//"linkserver_device": "MIMXRT1176xxxxx:MIMXRT1170-EVK-CM7-ONLY", // for MCU-Link CMSIS-DAP launch settings
+		//"pyocd_device": "mimxrt1170_cm7",                               // for pyOCD launch settings
+		//"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
+
+		"cmake.configureOnOpen": false,
 	},
 	// tasks.json section
 	"tasks": {
@@ -45,7 +51,9 @@
 				"args": [
 					"build",
 					"-b", "${config:board}",
+					"-b", "${config:board}",
 					//"-v"
+					"--build-dir", "${config:build_dir}",
 					"--build-dir", "${config:build_dir}",
 					"nxp-zephyr/samples/bluetooth/a2dp_source",
 				],
@@ -78,14 +86,17 @@
 		"version": "0.2.0",
 		"configurations": [
 			// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
+			// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
 			{
 				"name": "Debug with JLink",
 				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
 				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
 				"request": "launch",
 				"type": "cortex-debug",
 				"servertype": "jlink",
 				//"serialNumber": "xxxxxxxx", // if you have more than one J-Link probe add the serial number here
+				//"interface": "swd", // "swd" or "jtag"
 				//"interface": "swd", // "swd" or "jtag"
 				"linux": {
 					"serverpath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
