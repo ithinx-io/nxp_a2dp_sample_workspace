@@ -5,7 +5,6 @@ ARG USER_NAME=user
 ARG USER_UID=1111
 ARG USER_GID=$USER_UID
 
-## Setup a user with sudo support
 USER root
 
 RUN  apt update \
@@ -37,8 +36,8 @@ RUN  apt install -y -q sudo \
   && if ! grep x:$USER_GID: /etc/group;  then groupmod --gid $USER_GID user; fi \
   && if ! grep x:$USER_GID: /etc/group;  then groupmod --gid $USER_GID user; fi \
   && if ! grep $USER_NAME:x /etc/group;  then groupmod --new-name $USER_NAME user; fi \
-  && if ! grep x:$USER_UID: /etc/passwd; then usermod --uid $USER_UID $USER_NAME; fi \
-  && if ! grep :$USER_GID:: /etc/passwd; then usermod --gid $USER_GID $USER_NAME; fi \
+  && if ! grep x:$USER_UID: /etc/passwd; then usermod --uid $USER_UID user; fi \
+  && if ! grep :$USER_GID:: /etc/passwd; then usermod --gid $USER_GID user; fi \
   && if ! grep $USER_NAME:x /etc/passwd; then usermod --login $USER_NAME --move-home --home /home/$USER_NAME user; fi \
   && mkdir -p /home/$USER_NAME/.config \
   && chown -R $USER_UID:$USER_GID /home/$USER_NAME \
