@@ -21,13 +21,32 @@ To initialize:
 
 # Required Hardware rework
 
-To run this sample on an EVK with M.2 wireless card some HW rework ist necessary:
-- **MIMXRT1170-EVKB**
-  - remove R183 (LPSPI1_SDI to LPSPI Flash)
-  - remove R1816 (GPIO_DISP_B2_12 to RGMII1_PHY_INTB)
-  - add 0R to R404 (GPIO_AD_31 to WL_RST#)
-  - add 0R to R1901 (GPIO_DISP_B2_11/BT_UART_RXD to M.2 (via 1.8V Levelshifter))
-  - add 0R to R1902 (GPIO_DISP_B2_12/BT_UART_CTS to M.2 (via 1.8V Levelshifter))
+To run this sample on an EVK with M.2 wireless card some HW rework for BT/Audio ist necessary:
+- **[MIMXRT1170-EVKB](https://mcuxpresso.nxp.com/mcuxsdk/24.12.00/html/middleware/edgefast_bluetooth/docs/HWRGEFBTPALUG/topics/MIMXRT1170-EVKB_Murata_1ZM.html)**
+  - HCI UART rework
+    - remove R183 (LPSPI1_SDI to LPSPI Flash)
+    - remove R1816 (GPIO_DISP_B2_12 to RGMII1_PHY_INTB)
+    - add 0R to R404 (GPIO_AD_31 to WL_RST#)
+    - add 0R to R1901 (GPIO_DISP_B2_11/BT_UART_RXD to M.2 (via 1.8V Levelshifter))
+    - add 0R to R1902 (GPIO_DISP_B2_12/BT_UART_CTS to M.2 (via 1.8V Levelshifter))
+  - PCM interface rework
+    - disconnect J79 (BT_PCM_SYNC -> BT_PCM_SYNC_1V8)
+    - disconnect J80 (BT_PCM_BCLK -> BT_PCM_BCLK_1V8)
+    - connect J81 (BT_PCM_BCLK_1V8 -> BT_PCM_BCLK)
+    - connect J82 (BT_PCM_SYNC_1V8 -> BT_PCM_SYNC)
+    - remove R1985 (GPIO_EMC_B2_13 -> SEMC_D28)
+    - remove R1992 (GPIO_EMC_B2_13 -> DC_I2S3_RX_D0)
+    - remove R1986 (GPIO_EMC_B2_14 -> SEMC_D29)
+    - remove R1993 (GPIO_EMC_B2_14 -> DC_I2S3_TX_D0)
+    - remove R1987 (GPIO_EMC_B2_15 -> SEMC_D30)
+    - remove R1994 (GPIO_EMC_B2_15 -> DC_I2S3_TX_BCLK)
+    - remove R1988 (GPIO_EMC_B2_16 -> SEMC_D31)
+    - remove R1995 (GPIO_EMC_B2_16 -> DC_I2S3_TX_SYNC)
+    - add 0R to R228 (GPIO_EMC_B2_13 -> BT_PCM_RXD)
+    - add 0R to R229 (GPIO_EMC_B2_16 -> BT_PCM_SYNC)
+    - add 0R to R232 (GPIO_EMC_B2_15 -> BT_PCM_BCLK)
+    - add 0R to R234 (GPIO_EMC_B2_14 -> BT_PCM_TXD)
+    - add 0R to R1903 (BT_PCM_RXD_1V8 -> BT_PCM_RXD)
 
   For the location of the resistors above please refer to the [front](docs/MIMXRT1170-EVKB%20UART%20Front.png) and [back](docs/MIMXRT1170-EVKB%20UART%20Back.png) board images
 
@@ -50,7 +69,7 @@ To run this sample on an EVK with M.2 wireless card some HW rework ist necessary
     - remove R381 or R220 (ENET_RST -> KSZ8081RNB)
     - remove R87  (BT_PCM_RXD_1V8 -> BT_PCM_RXD)
 
-    For the location of these resistors above please refer to the [front](docs/MIMXRT1060-EVK%20PCM%20Front.png) and [back](docs/MIMXRT1060-EVK%20PCM%20Back.png) board images and [schematics](docs/MIMXRT1060-EVKB-Schematics.pdf)
+    For the location of these resistors above please refer to the [schematics](docs/MIMXRT1060-EVKB-Schematics.pdf)
 
 - **[MIMXRT1060-EVKC](https://mcuxpresso.nxp.com/mcuxsdk/24.12.00/html/middleware/edgefast_bluetooth/docs/HWRGEFBTPALUG/topics/RT1060EVKC_Murata_1XKM2.html#hardware-rework)**
   - HCI UART rework
