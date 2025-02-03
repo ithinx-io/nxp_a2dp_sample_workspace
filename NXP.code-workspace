@@ -51,9 +51,7 @@
 				"args": [
 					"build",
 					"-b", "${config:board}",
-					"-b", "${config:board}",
 					//"-v"
-					"--build-dir", "${config:build_dir}",
 					"--build-dir", "${config:build_dir}",
 					"nxp-zephyr/samples/bluetooth/a2dp_source",
 				],

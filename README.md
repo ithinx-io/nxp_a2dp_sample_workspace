@@ -5,15 +5,15 @@ west project to test NXP A2DP sample
 # Initial project setup
 
 This project contains a setup containing a [workspace file](https://code.visualstudio.com/docs/editor/workspaces) and [DevContainer](https://code.visualstudio.com/docs/devcontainers/containers) environment based on the official [Zephyr Docker setup](https://github.com/zephyrproject-rtos/docker-image) for [Visual Studio Code](https://code.visualstudio.com). \
-Additionally it make sure the required Zephyr Toolchains from the Zephyr Dockerfile are usable. \
+Additionally it makes sure the required Zephyr Toolchains from the Zephyr Dockerfile are usable. \
 To initialize:
-- recursively clone this repo containing the Zephyr DevContainer Workspace and the NXP-Zephyr as submodule:
+- clone this repo containing the Zephyr DevContainer Workspace and the NXP-Zephyr as submodule:
   ```
-  git clone --recurse-submodules <clone-url-of-this repo>
+  git clone <clone-url-of-this repo>
   ```
 - Open the project by doubleClick on the [NXP.code-workspace](NXP.code-workspace) file. \
   VisualStudio Code will ask to `reopen the workspace in DevContainer`, please select `Reopen in Container` (mandatory!).
-- After VSCode startup (will take some time for the initial docker container build), update Zephyr modules and HAL blobs:
+- After VSCode startup (will take some time for the initial docker container build), fetch/update NXP Zephyr and NXP HAL blobs:
   ```
   west update
   west blobs fetch hal_nxp
@@ -97,10 +97,18 @@ MIMXRT1060-EVK PCM Back.png
 
 - by command line:
   ```
-  west build nxp-zephyr/samples/bluetooth/a2dp_source
+  west build -b <board> nxp-zephyr/samples/bluetooth/a2dp_source
   ```
+  Supported evaluation boards:
+  | Evaluation Board | build \<board> parameter | Device Tree Overlay File| additional Project Config File |
+  |---|---|---|---|
+  | NXP MIMXRT1060_EVK | **mimxrt1060_evk@qspi** | [mimxrt1060_evk_qspi.overlay](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1060_evk_qspi.overlay) | [mimxrt1060_evk_qspi.conf](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1060_evk_qspi.conf) |
+  | NXP MIMXRT1060_EVKB | **mimxrt1060_evkb** | [mimxrt1060_evkb.conf](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1060_evkb.conf) | [mimxrt1060_evkb.overlay](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1060_evkb.overlay) |
+  | NXP MIMXRT1170_EVK  | **mimxrt1170_evk@B/mimxrt1176/cm7** | [mimxrt1170_evk_mimxrt1176_cm7_B.overlay](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1170_evk_mimxrt1176_cm7_B.overlay) | [mimxrt1170_evk_mimxrt1176_cm7_B.conf](https://github.com/ithinx-io/nxp-zephyr/blob/feature/MCUX-74374-a2dp-source-sample-itx/samples/bluetooth/a2dp_source/boards/mimxrt1170_evk_mimxrt1176_cm7_B.conf) |
+
 - by VSCode: \
-  Simply press **Ctrl** + **Shift** + **B** (="Terminal"->"exeucte build job")
+  Simply press **Ctrl** + **Shift** + **B** (="Terminal"->"exeucte build job"). \
+  The build options (board, device, build dir) can be changed in the [workspace config section](NXP.code-workspace#L21-L39).
 
 # Run example
 

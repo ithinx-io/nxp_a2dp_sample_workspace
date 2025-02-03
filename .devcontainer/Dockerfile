@@ -42,8 +42,7 @@ RUN  apt install -y -q sudo \
   && mkdir -p /home/$USER_NAME/.config \
   && chown -R $USER_UID:$USER_GID /home/$USER_NAME \
   && chsh -s /usr/bin/bash $USER_NAME \
-  && usermod -a -G root $USER_NAME \
-  && usermod -a -G dialout $USER_NAME \
+  && usermod -a -G dialout,plugdev $USER_NAME \
   && echo "$USER_NAME ALL = NOPASSWD: ALL" > /etc/sudoers.d/$USER_NAME \
   && chmod 0440 /etc/sudoers.d/$USER_NAME
 
