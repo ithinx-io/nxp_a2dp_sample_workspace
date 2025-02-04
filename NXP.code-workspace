@@ -25,18 +25,18 @@
 		//"svd_path": ".devcontainer/scripts/MIMXRT1062.xml",
 
 		// NXP MIMXRT1060_EVKB
-		"board": "mimxrt1060_evkb",
-		"device": "MIMXRT1062XXX6B",
-		"build_dir": "build/MIMXRT1060EVKB",
-		"svd_path": ".devcontainer/scripts/MIMXRT1062.xml",
+		//"board": "mimxrt1060_evkb",
+		//"device": "MIMXRT1062XXX6B",
+		//"build_dir": "build/MIMXRT1060EVKB",
+		//"svd_path": ".devcontainer/scripts/MIMXRT1062.xml",
 
-		// NXP MIMXRT1170_EVK
-		//"board": "mimxrt1170_evk@B/mimxrt1176/cm7",
-		//"device": "MIMXRT1176DVMAA",
-		//"build_dir": "build/MIMXRT1170EVKB",
-		//"linkserver_device": "MIMXRT1176xxxxx:MIMXRT1170-EVK-CM7-ONLY", // for MCU-Link CMSIS-DAP launch settings
+		// NXP MIMXRT1170_EVKB
+		"board": "mimxrt1170_evk@B/mimxrt1176/cm7",
+		"device": "MIMXRT1176DVMAA",
+		"build_dir": "build/MIMXRT1170EVKB",
+		"linkserver_device": "MIMXRT1176xxxxx:MIMXRT1170-EVK-CM7-ONLY", // for MCU-Link CMSIS-DAP launch settings
 		//"pyocd_device": "mimxrt1170_cm7",                               // for pyOCD launch settings
-		//"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
+		"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
 
 		"cmake.configureOnOpen": false,
 	},
@@ -150,7 +150,7 @@
 				"request": "launch",
 				"type": "cortex-debug",
 				"servertype": "pyocd",
-				"serverArgs": [ "-t", "mimxrt1170_cm7" ],
+				"serverArgs": [ "-t", "${config:pyocd_device}" ],
 				"linux": {
 					"armToolchainPath": "/opt/toolchains/zephyr-sdk-0.16.9/arm-zephyr-eabi/bin",
 					"toolchainPrefix": "arm-zephyr-eabi"
