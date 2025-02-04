@@ -65,6 +65,23 @@
 					"kind": "build",
 					"isDefault": true
 				}
+			},
+			{
+				"label": "west: guiconfig",
+				"type": "shell",
+				"command": "west",
+				"args": [
+					"build",
+					"-b", "${config:board}",
+					"--build-dir", "build/guiconfig",
+					"nxp-zephyr/samples/bluetooth/a2dp_source",
+					"-t", "guiconfig"
+				],
+				"problemMatcher": [],
+				"group": {
+					"kind": "build",
+					"isDefault": false
+				}
 			}
 		],
 		"inputs": [

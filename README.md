@@ -58,8 +58,8 @@ To run this sample on an EVK with M.2 wireless card some HW rework for BT/Audio 
     - remove R193 (I2C3_SCL to GPIO_AD_B1_07)
     - mount R363  (GPIO_SD_B0_00 -> WIFI_SDIO_CMD)
     - remove R364 (GPIO_SD_B0_00 to SD1_CMD)
-    - mount R363  (GPIO_SD_B0_01 -> WIFI_SDIO_CLK)
-    - remove R364 (GPIO_SD_B0_01 to SD1_CLK)
+    - mount R365  (GPIO_SD_B0_01 -> WIFI_SDIO_CLK)
+    - remove R366 (GPIO_SD_B0_01 to SD1_CLK)
 
   - PCM interface rework
     - remove  R86 (BT_PCM_BCLK -> BT_PCM_BCLK_1V8)
