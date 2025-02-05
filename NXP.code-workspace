@@ -38,7 +38,7 @@
 		//"pyocd_device": "mimxrt1170_cm7",                               // for pyOCD launch settings
 		"svd_path": ".devcontainer/scripts/MIMXRT1176_cm7.xml",
 
-		"cmake.configureOnOpen": false,
+		"cmake.configureOnOpen": false
 	},
 	// tasks.json section
 	"tasks": {
@@ -73,11 +73,13 @@
 				"args": [
 					"build",
 					"-b", "${config:board}",
-					"--build-dir", "build/guiconfig",
+					"--build-dir", "${config:build_dir}/guiconfig",
 					"nxp-zephyr/samples/bluetooth/a2dp_source",
 					"-t", "guiconfig"
 				],
-				"problemMatcher": [],
+				"problemMatcher": [
+					"$gcc"
+				],
 				"group": {
 					"kind": "build",
 					"isDefault": false
@@ -101,11 +103,9 @@
 		"version": "0.2.0",
 		"configurations": [
 			// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
-			// https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
 			{
 				"name": "Debug with JLink",
 				"cwd": "${workspaceFolder}",
-				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
 				"executable": "${workspaceFolder}/${config:build_dir}/zephyr/zephyr.elf",
 				"request": "launch",
 				"type": "cortex-debug",
