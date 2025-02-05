@@ -49,15 +49,17 @@ pipeline {
 				sh '''
 				   west update --fetch smart --narrow
 				   west blobs fetch
-				   west build nxp-zephyr/samples/bluetooth/a2dp_source
+				   west build -b mimxrt1060_evk@qspi             --build-dir build/MIMXRT1060EVK@QSPI nxp-zephyr/samples/bluetooth/a2dp_source
+				   west build -b mimxrt1060_evkb                 --build-dir build/MIMXRT1060EVKB     nxp-zephyr/samples/bluetooth/a2dp_source
+				   west build -b mimxrt1170_evk@B/mimxrt1176/cm7 --build-dir build/MIMXRT1170EVKB     nxp-zephyr/samples/bluetooth/a2dp_source
 				'''
 			}
 		}
 
 		stage ('archive') {
 			steps{
-				dir('build/zephyr') {
-					archiveArtifacts artifacts: 'zephyr.bin,zephyr.elf,zephyr.map',
+				dir('build') {
+					archiveArtifacts artifacts: '**/zephyr.bin,**/zephyr.elf,**/zephyr.map',
 					                            fingerprint: true, onlyIfSuccessful: true, followSymlinks: true
 				}
 			}
@@ -65,10 +67,8 @@ pipeline {
 	}
 	post {
 		success {
-			script {
-				// clear build directory to save disk space
-				sh "rm -rf $WORKSPACE/build"
-			}
+			// clear workspace after successful build to save disk space
+			cleanWs()
 		}
 		always {
 			script {
