@@ -50,7 +50,50 @@ To run this sample on an EVK with M.2 wireless card some HW rework for BT/Audio 
 
   For the location of the resistors above please refer to the [front](docs/MIMXRT1170-EVKB%20UART%20Front.png) and [back](docs/MIMXRT1170-EVKB%20UART%20Back.png) board images
 
-- **MIMXRT1060-EVKB**
+- **[MIMXRT1060-EVKB](Hardware%20Rework%20Guide%20for%20EdgeFast%20BT%20PAL.pdf)** (chapter 1 or 2)
+  - HCI UART rework
+    - remove R293
+    - remove R354
+    - connect R293 pin2 with R354 Pin1
+    - remove R241
+    - remove R163
+    - connect R93 pin1 with R241 Pin2
+    - add 0R to R96
+    - add 0R to R93
+    - add 0R to R87
+    - add 0R to R79
+    - add 0R to R70
+    - add 0R to R345
+    - remove R193
+    For the location of the resistors above please refer to the [front](docs/MIMXRT1060-EVKB%20UART%20Front.png) and [back](docs/MIMXRT1060-EVKB%20UART%20Back.png) board images
+  - I2S2 rework
+    - Open jumpers: J35, J36, J37, and J41.
+    - Connect J35 (Pin2) with J19 (Pin3) and solder R341.
+    - Connect J36 (Pin2) with J19 (Pin9) and solder R334
+    - Connect J41 (Pin2) with TP11.
+    - Connect J37 (Pin2) with J16 (Pin5).
+    - Connect R428 with R254 (Pin2), remove R254, R173, and R175.
+    - Remove R86, R76, and R381
+
+    For the location of the resistors above please refer to the [front](docs/MIMXRT1060-EVKB%20I2S2%20Front.png) and [back](docs/MIMXRT1060-EVKB%20I2S2%20Back.png) board images
+
+  - M.2 SDIO rework
+    - add 0R to R368
+    - add 0R to R376
+    - add 0R to R347
+    - add 0R to R349
+    - add 0R to R365
+    - add 0R to R363
+    - remove R364
+    - remove R366
+    - remove R351
+    - remove R348
+    - remove R377
+    - remove R369
+
+    For the location of the resistors above please refer to the [back](docs/MIMXRT1060-EVKB%20SDIO%20Back.png) board image
+
+- **MIMXRT1060-EVKB** (own)
   - HCI UART rework
     - mount R93   (GPIO_AD_B0_03 -> BT_UART_CTS)
     - mount R96   (GPIO_AD_B1_07 -> BT_UART_RXD)
